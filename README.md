@@ -1,4 +1,4 @@
-<img width="872" height="400" alt="image" src="https://github.com/user-attachments/assets/ad381ec7-02ee-47f6-98c0-5d2859ec4f6e" /># 🌦️ Advanced Weather Dashboard with Real-Time AQI
+# 🌦️ Advanced Weather Dashboard with Real-Time AQI
 
 A modern, responsive, and feature-rich weather application built using **Python (Flask)** and the **OpenWeatherMap API**. This dashboard provides deep insights into current weather conditions and air quality with a dynamic, living UI.
 
@@ -47,8 +47,7 @@ weather_app/
    ## ⚙️ Setup & Installation
 
 2. **Install Dependencies:**
-   ```bash
-  pip install -r requirements.txt
+   ```bash   pip install -r requirements.txt
 
 3. **API Configuration: Create a .env file in the root directory and add your API key:**
    ```bash
