@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ title }} Weather</title>
+    <link href="{{ url_for('static', filename='styles/style.css') }}" rel="stylesheet" />
+</head>
+
+<body class="{{ condition | lower }}-bg">
+
+    <div class="page-wrapper">
+        <div class="top-section">
+            <div class="main-container">
+                <h1>{{ title }} Weather</h1>
+                <div class="temp-display">
+                    <img src="http://openweathermap.org/img/wn/{{ icon }}@4x.png" class="main-weather-icon"
+                        alt="weather icon">
+                    <div class="temp-text-group">
+                        <p class="current-temp">{{ status }} and {{ temp }}&deg;C</p>
+                        <p class="feels-like">Feels Like {{ feels_like }}&deg;C</p>
+                    </div>
+                </div>
+                <p class="update-text">Last updated: {{ date }} | {{ time }}</p>
+
+                <form action="/weather" method="get" class="search-form">
+                    <input type="text" name="city" placeholder="Search another city..." required />
+                    <button type="submit">SEARCH</button>
+                </form>
+                <div id="recent-searches" class="recent-container">
+                </div>
+            </div>
+
+            <div class="weather-details-side">
+                <div class="detail-item">
+                    <span>💧 Humidity</span>
+                    <p>{{ humidity }}%</p>
+                </div>
+                <div class="detail-item">
+                    <span>💨 Wind Speed</span>
+                    <p>{{ wind_speed }} m/s</p>
+                </div>
+                <div class="detail-item">
+                    <span>🍃 Air Quality</span>
+                    <p>{{ aqi }}</p>
+                </div>
+            </div>
+        </div>
+
+        <hr class="separator">
+
+        <div class="hourly-container">
+            <h3>Next 24 Hours</h3>
+            <div class="hourly-ribbon">
+                {% for hour in hourly %}
+                <div class="hour-card">
+                    <p class="time-label">{{ hour.time }}</p>
+                    <img src="http://openweathermap.org/img/wn/{{ hour.icon }}.png" alt="icon">
+                    <p class="temp-label"><strong>{{ hour.temp }}&deg;</strong></p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <hr class="separator">
+
+        <div class="forecast-container">
+            <h2>5-Day Forecast</h2>
+            <div class="forecast-grid">
+                {% for day in forecast %}
+                <div class="forecast-card">
+                    <p class="forecast-date">{{ day.date }}</p>
+                    <img src="http://openweathermap.org/img/wn/{{ day.icon }}@2x.png" alt="weather icon">
+                    <p class="f-temp"><strong>{{ day.temp }}&deg;C</strong></p>
+                    <p class="f-desc">{{ day.description }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="footer-link">
+            <a href="/" class="home-link">&larr; Back to Home</a>
+        </div>
+    </div>
+
+</body>
+<script>
+    const searchForm = document.querySelector('form');
+    const cityInput = document.querySelector('input[name="city"]');
+    const recentContainer = document.getElementById('recent-searches');
+
+    // 1. Function: Local Storage se cities nikalna aur display karna
+    function displayRecentSearches() {
+        const searches = JSON.parse(localStorage.getItem('recentWeatherSearches')) || [];
+        recentContainer.innerHTML = ''; // Pehle wala clear karein
+
+        searches.forEach(city => {
+            const pill = document.createElement('button');
+            pill.classList.add('city-pill');
+            pill.textContent = city;
+            // Click karne par search kare
+            pill.onclick = () => {
+                window.location.href = `/weather?city=${city}`;
+            };
+            recentContainer.appendChild(pill);
+        });
+    }
+
+    // 2. Function: New city ko save karna
+    if (searchForm) {
+        searchForm.onsubmit = () => {
+            const city = cityInput.value.trim();
+            if (city) {
+                let searches = JSON.parse(localStorage.getItem('recentWeatherSearches')) || [];
+                // Agar city pehle se nahi hai toh add karein (Max 5 cities)
+                if (!searches.includes(city)) {
+                    searches.unshift(city); // Shuru mein add karein
+                    if (searches.length > 5) searches.pop(); // Sirf 5 rakhein
+                    localStorage.setItem('recentWeatherSearches', JSON.stringify(searches));
+                }
+            }
+        };
+    }
+
+    // Page load hote hi dikhayen
+    displayRecentSearches();
+</script>
+
+</html>
