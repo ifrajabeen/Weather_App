@@ -44,15 +44,10 @@ weather_app/
    ```bash
    git clone [https://github.com/ifrajabeen/Weather_App.git](https://github.com/ifrajabeen/Weather_App.git)
    cd Weather_App
-``
-   ## ⚙️ Setup & Installation
-
 2. **Install Dependencies:**
 3. **API Configuration: Create a .env file in the root directory and add your API key:**
 4. **Run the App:**
-   ```bash
-  python server.py
-``
+
 ## ⚠️ Error Handling & Security
 The project includes multi-layer validation to ensure a smooth user experience and data safety:
 
